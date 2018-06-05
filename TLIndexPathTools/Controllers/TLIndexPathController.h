@@ -60,8 +60,7 @@ extern NSString * kTLIndexPathUpdatesKey;
  it can be replaced with a model containing a "no results" item.
  
  @param controller  the index path controller that sent the message.
- @param oldDataModel the old data model used before the update.
- @param updatedDataModel the new data model returned after the update.
+ @param updates  the updates object that can be used to perform batch updates on a table or collection view.
  @returns an alternative data model to use instead of `updatedDataModel` or `nil` to use `updatedDataModel`
  
  */
@@ -168,7 +167,7 @@ extern NSString * kTLIndexPathUpdatesKey;
 /**
  Returns an index path controller initialized with the given items.
  
- @param items  the array of items
+ @param items  the aray of items
  @return the index path controller with a default data model representation of the given items
  
  A default data model is initialized with items where the properties `identifierKeyPath`,
@@ -188,15 +187,15 @@ extern NSString * kTLIndexPathUpdatesKey;
  Returns an index path controller initialized with the given fetch request and
  configuration parameters.
  
- @param fetchRequest the fetch request used to do the fetching
- @param context the managed object context used to fetch objects
- @param sectionNameKeyPath the key path on the fetched objects used to determine the section they belong to
- @param identifierKeyPath how the identifier should be generated
- @param cacheName the name of the file used to cache section information
+ @param fetchRequest
+ @param context
+ @param sectionNameKeyPath
+ @param identifierKeyPath
+ @param cacheName
  @return the index path controller with a default data model representation of the given fetch request
  
  */
-- (instancetype)initWithFetchRequest:(NSFetchRequest *)fetchRequest managedObjectContext:(NSManagedObjectContext *)context sectionNameKeyPath:(NSString * __nullable)sectionNameKeyPath identifierKeyPath:(NSString * __nullable)identifierKeyPath cacheName:(NSString * __nullable)cacheName;
+- (instancetype)initWithFetchRequest:(NSFetchRequest *)fetchRequest managedObjectContext:(NSManagedObjectContext *)context sectionNameKeyPath:(NSString * __nullable)sectionNameKeyPath identifierKeyPath:(NSString * __nullable)identifierKeyPath cacheName:(NSString * __nullable)name;
 
 #pragma mark - Configuration information
 /** @name Configuration information */
@@ -268,13 +267,6 @@ extern NSString * kTLIndexPathUpdatesKey;
  */
 @property (strong, nonatomic, nullable) TLIndexPathDataModel *dataModel;
 
-/**
- A block which is used to determine if an old data model object has been modified. This is passed two objects and should return `NO` if the objects are to be considered the same, or `YES` if modifications have occurred. This block can be `nil`.
- 
- If non-nil this is passed to the TLIndexPathUpdates initializer.
- */
-@property (copy, nonatomic, nullable) BOOL (^ modificationComparatorBlock)(id item1, id item2);
-
 #pragma mark - Batch updates
 /** @name Batch updates */
 
@@ -284,7 +276,7 @@ extern NSString * kTLIndexPathUpdatesKey;
  fetch request (and perform fetch), in-memory sort descriptors, and in-memory
  predicate as a single update.
  
- @param updates  a block that makes changes to the controller
+ @param udpates  a block that makes changes to the controller
  @param completion  a block to be executed after the batch updates are performed.
         Note that controller:didUpdateDataModel: is called before this block.
  

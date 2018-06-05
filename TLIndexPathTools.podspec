@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "TLIndexPathTools"
-  s.version      = "0.4.4"
+  s.version      = "0.4.5"
   s.summary      = "TLIndexPathTools is a small set of classes that can greatly simplify your table and collection views."
   s.description  = <<-DESC
 					TLIndexPathTools is a small set of classes that can greatly simplify your table and collection views. Here are some of the awesome things TLIndexPathTools does:

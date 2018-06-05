@@ -61,13 +61,13 @@ NSString * kTLIndexPathUpdatesKey = @"kTLIndexPathUpdatesKey";
     return self;
 }
 
-- (id)initWithFetchRequest:(NSFetchRequest *)fetchRequest managedObjectContext:(NSManagedObjectContext *)context sectionNameKeyPath:(NSString *)sectionNameKeyPath identifierKeyPath:(NSString *)identifierKeyPath cacheName:(NSString *)cacheName
+- (id)initWithFetchRequest:(NSFetchRequest *)fetchRequest managedObjectContext:(NSManagedObjectContext *)context sectionNameKeyPath:(NSString *)sectionNameKeyPath identifierKeyPath:(NSString *)identifierKeyPath cacheName:(NSString *)name
 {
     TLIndexPathDataModel *dataModel = [[TLIndexPathDataModel alloc] initWithItems:@[] sectionNameKeyPath:sectionNameKeyPath identifierKeyPath:identifierKeyPath];
     if (self = [self initWithDataModel:dataModel]) {
         //initialize the backing controller with nil sectionNameKeyPath because we don't require
         //items to be sorted by section, but NSFetchedResultsController does.
-        _backingController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:sectionNameKeyPath cacheName:cacheName];
+        _backingController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:context sectionNameKeyPath:sectionNameKeyPath cacheName:name];
         _backingController.delegate = self;
     }
     return self;
@@ -199,7 +199,7 @@ NSString * kTLIndexPathUpdatesKey = @"kTLIndexPathUpdatesKey";
             _dataModel = dataModel;
         }
     }
-    TLIndexPathUpdates *updates = [[TLIndexPathUpdates alloc] initWithOldDataModel:self.oldDataModel updatedDataModel:self.dataModel modificationComparatorBlock:self.modificationComparatorBlock];
+    TLIndexPathUpdates *updates = [[TLIndexPathUpdates alloc] initWithOldDataModel:self.oldDataModel updatedDataModel:self.dataModel];
     if ([self.updatedItems count]) {
         // TODO this should probably check for duplicates
         if (updates.modifiedItems) {
@@ -318,7 +318,7 @@ NSString * kTLIndexPathUpdatesKey = @"kTLIndexPathUpdatesKey";
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
-    if (type == NSFetchedResultsChangeUpdate) {
+    if (type == NSFetchedResultsChangeUpdate || type == NSFetchedResultsChangeMove) {
         [self.updatedItems addObject:anObject];
     }
 }
